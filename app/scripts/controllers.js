@@ -81,7 +81,7 @@ angular.module('Wayalarm.controllers', [])
 
   $scope.mapCreated = function (map) {
     $scope.map = map;
-    google.maps.event.addListener(map, 'click', function (e) {
+    google.maps.event.addListener(map, 'dblclick', function (e) {
       $scope.alarm = {};
       $scope.alarm.name = "";
       // An elaborate, custom popup
