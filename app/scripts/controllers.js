@@ -7,34 +7,47 @@ angular.module('Wayalarm.controllers', [])
   var oldLat = 0;
   var point;
   var me;
+  var destinationImage = new google.maps.MarkerImage(
+    'img/destination.png',
+    null, /* size is determined at runtime */
+    null, /* origin is 0,0 */
+    null, /* anchor is bottom center of the scaled image */
+    new google.maps.Size(30, 30)
+  );
+
+  var walkingImage = new google.maps.MarkerImage(
+    'img/walking.png',
+    null, /* size is determined at runtime */
+    null, /* origin is 0,0 */
+    null, /* anchor is bottom center of the scaled image */
+    new google.maps.Size(40, 50)
+  );
   $scope.addPoint = addPoint;
 
   function addPoint(index, res, e) {
-    
+
     if (point) {
       point.setMap(null);
     }
 
-    if (index!==null)
-    {
+    if (index !== null) {
       point = new google.maps.Marker({
-      position: $scope.points[index].position,
-      map: $scope.map,
-      title: "Destination"
-    });
-    }
-  
-    else
-    {
-    point = new google.maps.Marker({
-      position: e.latLng,
-      map: $scope.map,
-      title: "Destination"
-    });
-    
-    point.name = res;
-    $scope.points.push(point);
-      
+        position: $scope.points[index].position,
+        map: $scope.map,
+        title: "Destination",
+        icon: destinationImage
+      });
+    } else {
+      point = new google.maps.Marker({
+        position: e.latLng,
+        map: $scope.map,
+        title: "Destination",
+        icon: destinationImage
+      });
+
+      point.name = res;
+      $scope.points.push(point);
+
     }
   }
 
@@ -105,31 +118,38 @@ angular.module('Wayalarm.controllers', [])
   };
 
   navigator.geolocation.watchPosition(function (pos) {
-    
-    
+
+
     mapServices.setLocation(pos);
     if (!$scope.map) {
       return;
     }
-    
 
-      if (me)
-        me.setMap(null);
-      me = new google.maps.Marker({
-        position: {
-          lat: pos.coords.latitude,
-          lng: pos.coords.longitude
-        },
-        map: $scope.map,
-        title: "I'm here"
-      });
-      if (me && point) {
-        getDistance(me.position, point.position);
-      }
+
+    if (me)
+      me.setMap(null);
+    me = new google.maps.Marker({
+      position: {
+        lat: pos.coords.latitude,
+        lng: pos.coords.longitude
+      },
+      map: $scope.map,
+      title: "I'm here",
+      icon: walkingImage
+    });
+    if (me && point) {
+      getDistance(me.position, point.position);
+    }
 
   }, function (error) {
     console.log('Unable to get location: ' + error.message);
   });
+
+  $scope.centerOnMe = function () {
+    var pos = mapServices.getLocation();
+    var latLng = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
+    $scope.map.setCenter(latLng);
+  };
 
   //    $ionicLoading.show({
   //      content: 'Getting current location...',
