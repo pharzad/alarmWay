@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('Wayalarm', ['ionic', 'config', 'Wayalarm.controllers', 'Wayalarm.directives'])
+angular.module('Wayalarm', ['ionic', 'config', 'Wayalarm.controllers', 'Wayalarm.directives','Wayalarm.services'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
