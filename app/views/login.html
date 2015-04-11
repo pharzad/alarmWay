@@ -1,0 +1,74 @@
+<style>
+    .input-label {
+        display: flex !important;
+        color: white;
+    }
+</style>
+
+
+<ion-content class="login">
+
+    <div class="container">
+        <h1>Location Alert</h1>
+
+
+        <div class="list">
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">Email</span>
+                <input type="text" placeholder="exp:john@suhr.com" ng-model="user.email">
+            </label>
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">Password</span>
+                <input type="password" placeholder="Password" ng-model="user.password">
+            </label>
+        </div>
+        <p style="color: yellow ;
+  padding-left: 4%;">{{result}}</p>
+        <button class="button button-outline button-block button-light" ng-click="login();">
+            Login
+        </button>
+
+        <button class="button button-outline button-block button-light" ui-sref='register'>
+            Register
+        </button>
+
+        <div class="socialMedia">
+
+            <button class="button button-outline button-block button-light icon-left ion-social-facebook-outline" ng-click="fLogin();">Login With Facebook</button>
+<!--            <button class="button button-outline button-block button-light icon-left ion-social-googleplus" ng-click="gLogin();">Login With Google+</button>-->
+        </div>
+
+    </div>
+
+</ion-content>
+
+<script id="register.html" type="text/ng-template">
+    <div class="bar bar-header item-input-inset bar-positive" style="  overflow: initial;">
+
+        <button class="button button-icon icon ion-arrow-left-c" ui-sref="login"></button>
+
+        <div class="h1 title">Register</div>
+
+    </div>
+    <ng-form id="form" name="form">
+        <div class="list">
+            <label class="item item-input">
+                <span class="input-label">Email</span>
+                <input type="email" ng-model="user.email" required>
+            </label>
+            <p style="color: red;
+  padding-left: 4%;">{{result}}</p>
+            <label class="item item-input">
+                <span class="input-label">Password</span>
+                <input type="password" ng-model="user.password" required>
+            </label>
+            <label class="item item-input">
+                <span class="input-label">Re-Password</span>
+                <input type="password" ng-model="user.password2">
+            </label>
+        </div>
+        <button class="button button-block button-light" ng-click="register();" ng-disabled="user.password2!==user.password||!form.$valid">
+            Register
+        </button>
+    </ng-form>
+</script>

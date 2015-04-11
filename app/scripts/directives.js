@@ -9,11 +9,12 @@ angular.module('Wayalarm.directives', [])
       onCreate: '&'
     },
     link: function ($scope, $element, $attr) {
-
+        console.log('xxx');
       function initialize() {
-        navigator.geolocation.getCurrentPosition(function (pos) {
+          console.log('running');
+        
           var mapOptions = {
-            center: new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude),
+            center: new google.maps.LatLng(33, 44),
             zoom: 14,
             mapTypeId: google.maps.MapTypeId.ROADMAP
           };
@@ -21,12 +22,9 @@ angular.module('Wayalarm.directives', [])
           $scope.onCreate({
             map: map
           });
-        });
-
-
       }
-
-      google.maps.event.addDomListener(window, 'load', initialize);
+        initialize();
+        
     }
   };
 });
