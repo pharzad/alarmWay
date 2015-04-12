@@ -2,34 +2,43 @@
 
 angular.module('Wayalarm.controllers').controller('mainController', function ($scope, $ionicLoading, $ionicPopup, mapServices, $http, $state, $cordovaVibration, $interval, $cordovaMedia) {
 
-    var media1 = $cordovaMedia.newMedia("http://soundjax.com/reddo/97744%5EALARM.mp3");
+    // var media1 = $cordovaMedia.newMedia('http://soundjax.com/reddo/97744%5EALARM.mp3');
     $scope.points = [];
     $scope.shouldShowDelete = false;
-    
+    var options = {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0
+    };
+
     if (angular.isUndefined(localStorage.getItem('userEmail')) || localStorage.getItem('userEmail') === '')
         $state.go('login');
 
     mapServices.userVerify().then(function (res) {
-
         $scope.userInfo = res;
-
+        console.log(res);
         if (!angular.isUndefined($scope.userInfo)) {
             $scope.points = angular.copy($scope.userInfo.alarms);
+            console.log(typeof $scope.points);
+            console.log(typeof $scope.userInfo.alarms);
         } else {
             $scope.points = [];
         }
+
     });
 
-    if (!angular.isUndefined($scope.userInfo)) {
-        $scope.points = angular.copy($scope.userInfo.alarms);
-    } else {
-        $scope.points = [];
-    }
+    //    if (!angular.isUndefined($scope.userInfo)) {
+    //        if (!angular.isUndefined($scope.userInfo)) {
+    //            $scope.points = angular.copy($scope.userInfo.alarms);
+    //        } else {
+    //            $scope.points = [];
+    //        }
+    //    }
 
     $scope.addToMap = function (item) {
         var latLng = new google.maps.LatLng(item.geometry.location.lat, item.geometry.location.lng);
-        addPoint(null, item.address_components[0].short_name, null, latLng)
-            // console.log(item);
+        addPoint(null, item.address_components[0].short_name, null, latLng);
+        // console.log(item);
     }
 
     $scope.getLocation = function (val) {
@@ -55,7 +64,7 @@ angular.module('Wayalarm.controllers').controller('mainController', function ($s
         null, /* size is determined at runtime */
         null, /* origin is 0,0 */
         null, /* anchor is bottom center of the scaled image */
-        new google.maps.Size(30, 30)
+        new google.maps.Size(70, 70)
     );
 
     var walkingImage = new google.maps.MarkerImage(
@@ -68,13 +77,8 @@ angular.module('Wayalarm.controllers').controller('mainController', function ($s
     $scope.addPoint = addPoint;
 
     function pushToDb() {
-        $scope.userInfo.alarms = mapServices.locationAdaptor($scope.userInfo.alarms);
-        $http({
-            method: 'PUT',
-            url: 'http://52.11.39.202:8080/wayalarm/user/' + $scope.userInfo._id,
-            data: $scope.userInfo
-        }).then(function (res) {
 
+        mapServices.locationAdaptor($scope.userInfo).then(function (res) {
             if (res.data[0]) {
                 $scope.userInfo = res.data[0];
                 if (!angular.isUndefined($scope.userInfo.alarms)) {
@@ -83,7 +87,6 @@ angular.module('Wayalarm.controllers').controller('mainController', function ($s
                     $scope.points = [];
                 }
             }
-
         });
     }
 
@@ -210,12 +213,12 @@ angular.module('Wayalarm.controllers').controller('mainController', function ($s
 
         google.maps.event.addListener(map, 'dblclick', function (e) {
             $scope.alarm = {};
-            $scope.alarm.name = "";
+            $scope.alarm.name = '';
             // An elaborate, custom popup
             var myPopup = $ionicPopup.show({
                 template: '<input type="text" ng-model="alarm.name">',
                 title: 'Enter your Alarm Name',
-                subTitle: 'Please use a meaningfull Name',
+                subTitle: 'Name cannot be empty',
                 scope: $scope,
                 buttons: [
                     {
@@ -225,9 +228,9 @@ angular.module('Wayalarm.controllers').controller('mainController', function ($s
                         text: '<b>Save</b>',
                         type: 'button-positive',
                         onTap: function (e) {
-                            if (!$scope.alarm.name) {
-                                //don't allow the user to close unless he enters wifi password
+                            if ($scope.alarm.name === '') {
                                 e.preventDefault();
+                                alert('Name cannot be empty');
                             } else {
                                 return $scope.alarm.name;
                             }
@@ -243,7 +246,7 @@ angular.module('Wayalarm.controllers').controller('mainController', function ($s
             });
         });
     };
-    $interval(function () {
+    var repeator = $interval(function () {
 
         navigator.geolocation.getCurrentPosition(function (pos) {
             if (JSON.stringify(pos) !== JSON.stringify(mapServices.getLocation())) {
@@ -270,7 +273,7 @@ angular.module('Wayalarm.controllers').controller('mainController', function ($s
 
         }, function (error) {
             console.log('Unable to get location: ' + error.message);
-        });
+        }, options);
 
     }, 1000);
 
@@ -288,7 +291,7 @@ angular.module('Wayalarm.controllers').controller('mainController', function ($s
     };
 
     $scope.logOut = function () {
-
+        $interval.cancel(repeator);
         localStorage.setItem('userEmail', '');
         $state.go('login');
     };

@@ -1,11 +1,24 @@
+<div class="cover" ng-show="loading"><img src="img/portofsolutions.png" />
+</div>
 <style>
     .input-label {
         display: flex !important;
         color: white;
     }
+    
+    .cover {
+        position: absolute;
+        width: 100%;
+        z-index: 1;
+        background-color: rgb(21, 117, 104);
+        height: 100%;
+    }
+    .cover>img
+    {
+        height: 76%;
+        width: 100%;
+    }
 </style>
-
-
 <ion-content class="login">
 
     <div class="container">
@@ -35,7 +48,7 @@
         <div class="socialMedia">
 
             <button class="button button-outline button-block button-light icon-left ion-social-facebook-outline" ng-click="fLogin();">Login With Facebook</button>
-<!--            <button class="button button-outline button-block button-light icon-left ion-social-googleplus" ng-click="gLogin();">Login With Google+</button>-->
+            <!--            <button class="button button-outline button-block button-light icon-left ion-social-googleplus" ng-click="gLogin();">Login With Google+</button>-->
         </div>
 
     </div>
