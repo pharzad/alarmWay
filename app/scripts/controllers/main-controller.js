@@ -2,7 +2,8 @@
 
 angular.module('Wayalarm.controllers').controller('mainController', function ($scope, $ionicLoading, $ionicPopup, mapServices, $http, $state, $cordovaVibration, $interval, $cordovaMedia) {
 
-    // var media1 = $cordovaMedia.newMedia('http://soundjax.com/reddo/97744%5EALARM.mp3');
+    $ionicLoading.hide();
+    var media1 = $cordovaMedia.newMedia('http://soundjax.com/reddo/97744%5EALARM.mp3');
     $scope.points = [];
     $scope.shouldShowDelete = false;
     var options = {
@@ -79,23 +80,6 @@ angular.module('Wayalarm.controllers').controller('mainController', function ($s
     function pushToDb() {
 
         mapServices.locationAdaptor($scope.userInfo).then(function (res) {
-            if (res.data[0]) {
-                $scope.userInfo = res.data[0];
-                if (!angular.isUndefined($scope.userInfo.alarms)) {
-                    $scope.points = angular.copy(res.data[0].alarms);
-                } else {
-                    $scope.points = [];
-                }
-            }
-        });
-    }
-
-    $scope.deletePoint = function (index) {
-        $http({
-            method: 'DELETE',
-            url: 'http://52.11.39.202:8080/wayalarm/user/' + $scope.userInfo._id + '/alarm/' + $scope.userInfo.alarms[index]._id
-        }).then(function (res) {
-
             if (res.data) {
                 $scope.userInfo = res.data;
                 if (!angular.isUndefined($scope.userInfo.alarms)) {
@@ -104,9 +88,21 @@ angular.module('Wayalarm.controllers').controller('mainController', function ($s
                     $scope.points = [];
                 }
             }
-
         });
     }
+
+    $scope.deletePoint = function (index) {
+        console.log(index);
+        $http({
+            method: 'DELETE',
+            url: 'http://52.11.39.202:8080/wayalarm/user/' + $scope.userInfo._id + '/alarm/' + $scope.userInfo.alarms[index]._id
+        }).then(function (res) {
+            if (res.data) {
+                $scope.userInfo.alarms.splice(index, 1);
+                $scope.points.splice(index, 1);
+            }
+        });
+    };
 
     function addPoint(index, res, e, itemFromSearch) {
 

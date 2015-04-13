@@ -2,21 +2,27 @@
 
 angular.module('Wayalarm.controllers', [])
 
-.controller('loginController', function ($scope, $cordovaOauth, $state, $http, mapServices, $timeout) {
+.controller('loginController', function ($scope, $cordovaOauth, $state, $http, mapServices, $timeout, $ionicLoading) {
     $scope.loading = true;
-    $timeout(function(){
-        $scope.loading = false;    
-    },8000);
+    $timeout(function () {
+        $scope.loading = false;
+    }, 8000);
 
     $scope.user = {};
     $scope.fLogin = function () {
+        $ionicLoading.show({
+            content: 'Getting current location...',
+            showBackdrop: false
+        });
+
         $cordovaOauth.facebook("608245845976632", ["email", "user_location"]).then(function (result) {
             localStorage.setItem('access_token', result.access_token);
             mapServices.faceBookCheck().then(function (result) {
                 localStorage.setItem('userEmail', result.data.email);
                 mapServices.userVerify().then(function (res) {
-                    
-                    if (res.length>0) {
+
+                    if (res.length > 0) {
+
                         $state.go('main');
                     } else {
                         mapServices.createUser(result.data).then(function () {

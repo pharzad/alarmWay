@@ -10,8 +10,8 @@ angular.module('Wayalarm.directives', [])
         },
         link: function ($scope, $element, $attr) {
             var options = {
-                enableHighAccuracy: true,
-                timeout: 5000,
+                enableHighAccuracy: false,
+                timeout: 3000,
                 maximumAge: 0
             };
 
@@ -29,7 +29,16 @@ angular.module('Wayalarm.directives', [])
                         map: map
                     });
                 }, function (err) {
-                    alert(err);
+                    alert('GPS signal is weak try to turn on your wifi or change your position');
+                    var mapOptions = {
+                        center: new google.maps.LatLng(43.8220017, -3.5214818),
+                        zoom: 3,
+                        mapTypeId: google.maps.MapTypeId.ROADMAP
+                    };
+                    var map = new google.maps.Map($element[0], mapOptions);
+                    $scope.onCreate({
+                        map: map
+                    });
                 }, options);
             }
             initialize();

@@ -4,7 +4,7 @@
             <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
             <label class="item-input-wrapper">
                 <i class="icon ion-ios7-search placeholder-icon"></i>
-                <input type="text" ng-model="asyncSelected" placeholder="Search" typeahead="address.formatted_address  for address in getLocation($viewValue)" typeahead-loading="loadingLocations" typeahead-on-select="addToMap($item)" class="form-control">
+                <input type="text" ng-model="asyncSelected" placeholder="Search" typeahead="address.formatted_address  for address in getLocation($viewValue)" typeahead-loading="loadingLocations" typeahead-on-select="addToMap($item)"  class="form-control">
                 <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
 
             </label>
