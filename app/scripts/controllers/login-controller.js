@@ -10,19 +10,18 @@ angular.module('Wayalarm.controllers', [])
 
     $scope.user = {};
     $scope.fLogin = function () {
-        $ionicLoading.show({
-            content: 'Getting current location...',
-            showBackdrop: false
-        });
-
-        $cordovaOauth.facebook("608245845976632", ["email", "user_location"]).then(function (result) {
+        console.log('hello');
+        $cordovaOauth.facebook('608245845976632', ['email', 'user_location']).then(function (result) {
             localStorage.setItem('access_token', result.access_token);
             mapServices.faceBookCheck().then(function (result) {
                 localStorage.setItem('userEmail', result.data.email);
                 mapServices.userVerify().then(function (res) {
 
                     if (res.length > 0) {
-
+                        $ionicLoading.show({
+                            content: 'Loading',
+                            showBackdrop: false
+                        });
                         $state.go('main');
                     } else {
                         mapServices.createUser(result.data).then(function () {
@@ -32,18 +31,13 @@ angular.module('Wayalarm.controllers', [])
 
                 });
             }, function (error) {
-                alert("There was a problem getting your profile.  Check the logs for details.");
+                alert('There was a problem getting your profile.  Check the logs for details.');
                 console.log(error);
             });
 
         }, function (error) {
-            $state.go('main');
-            alert('There is a problem, try another login')
+            alert('There is a problem, try another login');
         });
-    };
-
-    $scope.gLogin = function () {
-
     };
 
     $scope.login = function () {

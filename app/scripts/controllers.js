@@ -21,7 +21,7 @@ angular.module('Wayalarm.controllers', [])
                 return item;
             });
         });
-    }
+    };
 
     var oldLng = 0;
     var oldLat = 0;

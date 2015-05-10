@@ -1,6 +1,14 @@
 'use strict';
 
 angular.module('Wayalarm.controllers').controller('mainController', function ($scope, $ionicLoading, $ionicPopup, mapServices, $http, $state, $cordovaVibration, $interval, $cordovaMedia) {
+    
+    $scope.thirdSlid = true;
+
+    $scope.goToApp = function(){
+    
+        $scope.thirdSlid = false;
+    
+    };
 
     $ionicLoading.hide();
     var media1 = $cordovaMedia.newMedia('http://soundjax.com/reddo/97744%5EALARM.mp3');
@@ -25,7 +33,6 @@ angular.module('Wayalarm.controllers').controller('mainController', function ($s
         } else {
             $scope.points = [];
         }
-
     });
 
     //    if (!angular.isUndefined($scope.userInfo)) {
@@ -104,6 +111,39 @@ angular.module('Wayalarm.controllers').controller('mainController', function ($s
         });
     };
 
+    function showAddMessage(e) {
+        $scope.alarm = {};
+        $scope.alarm.name = '';
+        // An elaborate, custom popup
+        var myPopup = $ionicPopup.show({
+            template: '<input type="text" ng-model="alarm.name">',
+            title: 'Enter your Alarm Name',
+            subTitle: 'Name cannot be empty',
+            scope: $scope,
+            buttons: [
+                {
+                    text: 'Cancel'
+          },
+                {
+                    text: '<b>Save</b>',
+                    type: 'button-positive',
+                    onTap: function (e) {
+                        if ($scope.alarm.name === '') {
+                            e.preventDefault();
+                            alert('Name cannot be empty');
+                        } else {
+                            return $scope.alarm.name;
+                        }
+                    }
+      }
+    ]
+        });
+
+        myPopup.then(function (res) {
+            addPoint(null, res, e, null);
+        });
+    }
+
     function addPoint(index, res, e, itemFromSearch) {
 
         if (point) {
@@ -158,7 +198,7 @@ angular.module('Wayalarm.controllers').controller('mainController', function ($s
 
     function rad(x) {
         return x * Math.PI / 180;
-    };
+    }
 
     $scope.toggleLeft = function () {
         $ionicSideMenuDelegate.toggleLeft();
@@ -199,7 +239,7 @@ angular.module('Wayalarm.controllers').controller('mainController', function ($s
                 $interval.cancel(alarmVib);
             });
         }
-    };
+    }
 
     $scope.mapCreated = function (map) {
         $scope.map = map;
@@ -208,38 +248,7 @@ angular.module('Wayalarm.controllers').controller('mainController', function ($s
         };
 
         google.maps.event.addListener(map, 'dblclick', function (e) {
-            $scope.alarm = {};
-            $scope.alarm.name = '';
-            // An elaborate, custom popup
-            var myPopup = $ionicPopup.show({
-                template: '<input type="text" ng-model="alarm.name">',
-                title: 'Enter your Alarm Name',
-                subTitle: 'Name cannot be empty',
-                scope: $scope,
-                buttons: [
-                    {
-                        text: 'Cancel'
-          },
-                    {
-                        text: '<b>Save</b>',
-                        type: 'button-positive',
-                        onTap: function (e) {
-                            if ($scope.alarm.name === '') {
-                                e.preventDefault();
-                                alert('Name cannot be empty');
-                            } else {
-                                return $scope.alarm.name;
-                            }
-                        }
-      }
-    ]
-            });
-
-            myPopup.then(function (res) {
-
-                addPoint(null, res, e, null);
-
-            });
+            showAddMessage(e);
         });
     };
     var repeator = $interval(function () {

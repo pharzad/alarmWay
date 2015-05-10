@@ -13,6 +13,9 @@ angular.module('Wayalarm', ['ionic', 'ngCordova', 'Wayalarm.controllers', 'Wayal
             // org.apache.cordova.statusbar required
             StatusBar.styleDefault();
         }
+        window.analytics.startTrackerWithId('UA-61764671-1');
+        window.analytics.trackView('locationAlert');
+        window.analytics.trackException('Description', true);
     });
 }).config(function ($stateProvider, $urlRouterProvider) {
     $stateProvider.state('login', {
