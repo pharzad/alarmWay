@@ -51,6 +51,7 @@
     "https://github.com/driftyco/ionic-plugins-keyboard.git",
     "org.apache.cordova.statusbar",
     "org.apache.cordova.vibration",
-    "org.apache.cordova.media"
+    "org.apache.cordova.media",
+    "cordova-plugin-file"
   ]
 }

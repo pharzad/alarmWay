@@ -10,7 +10,6 @@
     <!-- <link rel="stylesheet" href="vendor/some.contrib.css"> -->
     <!-- bower:css -->
     <link rel="stylesheet" href="lib/ionic/release/css/ionic.css" />
-    <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.css" />
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -23,12 +22,16 @@
 <body style="height:100%;">
 
 <div ui-view style="height:100%;"></div>
+    <div id="fb-root"></div>
     <!-- build:js scripts/vendor.js -->
     <!-- This Google Maps API file was downloaded from: -->
     <!-- https://maps.googleapis.com/maps/api/js?key=AIzaSyCJbVbwXJyvQ4OeAN8CFCA1aPOmuCNAlao &sensor=true -->
     <!-- Saving it in the vendor/ directory allows it to be bundled as part of the build system. -->
     <!-- You should replace it with a version downloaded using your API key -->
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true"></script>
+    
+        <!-- cordova script (this will be a 404 during development) -->
+    <script src="cordova.js"></script>
     <!-- bower:js -->
     <script src="lib/jquery/dist/jquery.js"></script>
     <script src="lib/angular/angular.js"></script>
@@ -43,10 +46,6 @@
     <script src="lib/ngCordova/dist/ng-cordova.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
-
-    <!-- cordova script (this will be a 404 during development) -->
-    <script src="cordova.js"></script>
-
 
     <!-- build:js scripts/scripts.js -->
     <script src="app.js"></script>

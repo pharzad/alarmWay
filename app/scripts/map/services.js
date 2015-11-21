@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('Wayalarm.services', [])
-    .factory('mapServices', function ($http, $q) {
+    .factory('mapServices', function ($http, $q, $cordovaFile) {
         var currentLocation = {},
             userInfo = {};
         // jsonRes = JSON.parse('{"data":{"id":"10153132303928954","name":"Pharzad Aziminia","gender":"male","location":{"id":"106104516087360","name":"Dana Point, California"},"picture":{"data":{"is_silhouette":false,"url":"https://fbcdn-profile-a.akamaihd.net/hprofile-ak-xfa1/v/t1.0-1/p50x50/10628171_10152742432883954_5532032450325246170_n.jpg?oh=6abeda5e2552e54f4403ce6bc47d1197&oe=55B9AF07&__gda__=1438471054_7f30cf116df4c950e21c3fbf7f08597e"}},"email":"pharzad.aziminia@gmail.com"},"status":200,"config":{"method":"GET","transformRequest":[null],"transformResponse":[null],"params":{"access_token":"CAAIpMkWV5jgBAIRuBCjgO4ujp5m1N4neyy528D4iWLZAHXvWOrgaPmOSMM5XL6iLu6Jilu6SazoR4iZBWYV7dBZCxBNBHEqrtjYA5Woyb62a7fTy5kHW8UwQ6hc1BlixanP1GLCXdj1N6AH70Hj2PUczFnfuhpHcS1Ozp22Cl5F0D31SzPLsp6GEOk3YlVHgVfLGgEKouArPZBEsrDaU","fields":"id,name,gender,location,website,picture,relationship_status,email","format":"json"},"url":"https://graph.facebook.com/v2.2/me","headers":{"Accept":"application/json, text/plain, */*"}},"statusText":"OK"}');
@@ -15,12 +15,15 @@ angular.module('Wayalarm.services', [])
             getLocation: function () {
                 return currentLocation;
             },
+
             setUserInfo: function (info) {
                 userInfo = info;
             },
+
             getUserInfo: function () {
                 return userInfo;
             },
+
             setUserEmail: function (email) {
                 localStorage.setItem('userEmail', email);
             },
@@ -35,12 +38,14 @@ angular.module('Wayalarm.services', [])
                 });
             },
 
-            userVerify: function () {
+            userVerify: function (email) {
+                if (!email)
+                    email = localStorage.getItem('userEmail')
                 return $http({
                     method: 'POST',
                     url: 'http://52.11.39.202:8080/wayalarm/verify',
                     data: {
-                        email: localStorage.getItem('userEmail')
+                        email: email
                     }
                 }).then(function (res) {
                     return res.data[0];
@@ -57,36 +62,45 @@ angular.module('Wayalarm.services', [])
                     return res;
                 });
             },
+
             locationAdaptor: function (info) {
                 var defered = $q.defer();
                 var temp = [];
                 angular.forEach(info.alarms, function (v) {
-                    temp.push({
-                        name: v.name,
-                        position: {
-                            D: v.position.D,
-                            k: v.position.k
-                        }
-                    });
+                    if (v.position) {
+                        var tempKeys = Object.keys(v.position);
+                        temp.push({
+                            name: v.name,
+                            position: {
+                                k: v.position[tempKeys[0]],
+                                D: v.position[tempKeys[1]]
+                            }
+                        });
+                    }
                 });
                 info.alarms = temp;
-                console.log(JSON.stringify(temp));
-                console.log('**************');
-                console.log(JSON.stringify(info));
-                console.log('**************');
-                console.log(JSON.stringify(info));
                 $http({
                     method: 'PUT',
                     url: 'http://52.11.39.202:8080/wayalarm/user/' + info._id,
                     data: info
-                }).then(function(res){
+                }).then(function (res) {
                     defered.resolve(res);
                 });
-                
+
                 return defered.promise;
 
-            }
+            },
 
+            fileOperations: function () {
+
+                $cordovaFile.checkFile(cordova.file.dataDirectory,'user.data')
+                    .then(function (success) {
+                        console.log(JSON.stringify(success));
+                    }, function (error) {
+                        // error
+                    });
+
+            }
 
 
         };

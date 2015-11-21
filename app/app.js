@@ -35,9 +35,7 @@ angular.module('Wayalarm', ['ionic', 'ngCordova', 'Wayalarm.controllers', 'Wayal
         templateUrl: 'register.html',
         controller: 'loginController'
     });
-    $urlRouterProvider.otherwise('/')
+    $urlRouterProvider.otherwise('/');
 }).config(function ($httpProvider) {
-    
     $httpProvider.defaults.headers.post['Content-Type'] = 'application/json; charset=utf-8';
-
 });

@@ -11,7 +11,7 @@ angular.module('Wayalarm.controllers').controller('mainController', function ($s
     };
 
     $ionicLoading.hide();
-    var media1 = $cordovaMedia.newMedia('http://soundjax.com/reddo/97744%5EALARM.mp3');
+//    var media1 = $cordovaMedia.newMedia('http://soundjax.com/reddo/97744%5EALARM.mp3');
     $scope.points = [];
     $scope.shouldShowDelete = false;
     var options = {
@@ -21,27 +21,19 @@ angular.module('Wayalarm.controllers').controller('mainController', function ($s
     };
 
     if (angular.isUndefined(localStorage.getItem('userEmail')) || localStorage.getItem('userEmail') === '')
+    {
+        console.log(JSON.stringify(localStorage.getItem('userEmail')));
         $state.go('login');
+    }
 
     mapServices.userVerify().then(function (res) {
         $scope.userInfo = res;
-        console.log(res);
         if (!angular.isUndefined($scope.userInfo)) {
             $scope.points = angular.copy($scope.userInfo.alarms);
-            console.log(typeof $scope.points);
-            console.log(typeof $scope.userInfo.alarms);
         } else {
             $scope.points = [];
         }
     });
-
-    //    if (!angular.isUndefined($scope.userInfo)) {
-    //        if (!angular.isUndefined($scope.userInfo)) {
-    //            $scope.points = angular.copy($scope.userInfo.alarms);
-    //        } else {
-    //            $scope.points = [];
-    //        }
-    //    }
 
     $scope.addToMap = function (item) {
         var latLng = new google.maps.LatLng(item.geometry.location.lat, item.geometry.location.lng);
@@ -99,7 +91,6 @@ angular.module('Wayalarm.controllers').controller('mainController', function ($s
     }
 
     $scope.deletePoint = function (index) {
-        console.log(index);
         $http({
             method: 'DELETE',
             url: 'http://52.11.39.202:8080/wayalarm/user/' + $scope.userInfo._id + '/alarm/' + $scope.userInfo.alarms[index]._id
@@ -112,6 +103,7 @@ angular.module('Wayalarm.controllers').controller('mainController', function ($s
     };
 
     function showAddMessage(e) {
+        
         $scope.alarm = {};
         $scope.alarm.name = '';
         // An elaborate, custom popup
@@ -140,6 +132,7 @@ angular.module('Wayalarm.controllers').controller('mainController', function ($s
         });
 
         myPopup.then(function (res) {
+            if ($scope.alarm.name!=='')
             addPoint(null, res, e, null);
         });
     }
@@ -205,7 +198,6 @@ angular.module('Wayalarm.controllers').controller('mainController', function ($s
     };
 
     function getDistance(p1, p2) {
-        console.log(JSON.stringify(p1));
         var R = 6378137; // Earth’s mean radius in meter
         var dLat = rad(p2.lat() - p1.lat());
         var dLong = rad(p2.lng() - p1.lng());

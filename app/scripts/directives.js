@@ -18,7 +18,6 @@ angular.module('Wayalarm.directives', [])
             function initialize() {
 
                 navigator.geolocation.getCurrentPosition(function (pos) {
-
                     var mapOptions = {
                         center: new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude),
                         zoom: 14,
