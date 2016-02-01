@@ -43,7 +43,7 @@ angular.module('Wayalarm.services', [])
                     email = localStorage.getItem('userEmail')
                 return $http({
                     method: 'POST',
-                    url: 'http://52.11.39.202:8080/wayalarm/verify',
+                    url: 'http://portofsolutions.com:8080/wayalarm/verify',
                     data: {
                         email: email
                     }
@@ -56,7 +56,7 @@ angular.module('Wayalarm.services', [])
             createUser: function (data) {
                 return $http({
                     method: 'POST',
-                    url: 'http://52.11.39.202:8080/wayalarm/user',
+                    url: 'http://portofsolutions.com:8080/wayalarm/user',
                     data: data
                 }).then(function (res) {
                     return res;
@@ -68,12 +68,11 @@ angular.module('Wayalarm.services', [])
                 var temp = [];
                 angular.forEach(info.alarms, function (v) {
                     if (v.position) {
-                        var tempKeys = Object.keys(v.position);
                         temp.push({
                             name: v.name,
                             position: {
-                                k: v.position[tempKeys[0]],
-                                D: v.position[tempKeys[1]]
+                                k: v.position.lat(),
+                                D: v.position.lng()
                             }
                         });
                     }
@@ -81,7 +80,7 @@ angular.module('Wayalarm.services', [])
                 info.alarms = temp;
                 $http({
                     method: 'PUT',
-                    url: 'http://52.11.39.202:8080/wayalarm/user/' + info._id,
+                    url: 'http://portofsolutions.com:8080/wayalarm/user/' + info._id,
                     data: info
                 }).then(function (res) {
                     defered.resolve(res);

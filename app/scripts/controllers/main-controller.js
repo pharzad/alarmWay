@@ -1,17 +1,23 @@
 'use strict';
 
 angular.module('Wayalarm.controllers').controller('mainController', function ($scope, $ionicLoading, $ionicPopup, mapServices, $http, $state, $cordovaVibration, $interval, $cordovaMedia) {
-    
+
+    if (AdMob) AdMob.createBanner({
+        adId: 'ca-app-pub-5009956909039505/6703947076',
+        position: AdMob.AD_POSITION.TOP_CENTER,
+        autoShow: true
+    });
+
     $scope.thirdSlid = true;
 
-    $scope.goToApp = function(){
-    
+    $scope.goToApp = function () {
+
         $scope.thirdSlid = false;
-    
+
     };
 
     $ionicLoading.hide();
-//    var media1 = $cordovaMedia.newMedia('http://soundjax.com/reddo/97744%5EALARM.mp3');
+    //    var media1 = $cordovaMedia.newMedia('http://soundjax.com/reddo/97744%5EALARM.mp3');
     $scope.points = [];
     $scope.shouldShowDelete = false;
     var options = {
@@ -20,8 +26,7 @@ angular.module('Wayalarm.controllers').controller('mainController', function ($s
         maximumAge: 0
     };
 
-    if (angular.isUndefined(localStorage.getItem('userEmail')) || localStorage.getItem('userEmail') === '')
-    {
+    if (angular.isUndefined(localStorage.getItem('userEmail')) || localStorage.getItem('userEmail') === '') {
         console.log(JSON.stringify(localStorage.getItem('userEmail')));
         $state.go('login');
     }
@@ -103,7 +108,7 @@ angular.module('Wayalarm.controllers').controller('mainController', function ($s
     };
 
     function showAddMessage(e) {
-        
+
         $scope.alarm = {};
         $scope.alarm.name = '';
         // An elaborate, custom popup
@@ -132,8 +137,8 @@ angular.module('Wayalarm.controllers').controller('mainController', function ($s
         });
 
         myPopup.then(function (res) {
-            if ($scope.alarm.name!=='')
-            addPoint(null, res, e, null);
+            if ($scope.alarm.name !== '')
+                addPoint(null, res, e, null);
         });
     }
 
@@ -243,6 +248,7 @@ angular.module('Wayalarm.controllers').controller('mainController', function ($s
             showAddMessage(e);
         });
     };
+
     var repeator = $interval(function () {
 
         navigator.geolocation.getCurrentPosition(function (pos) {

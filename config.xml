@@ -1,12 +1,14 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.portofsolutions.locationalert" version="0.0.4" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Alert</name>
-    <description>
-       Locationalert is an application facilate you with alarm on the map, You can pin point your destination and we will notify you when you got close to there.
-    </description>
-    <author email="portofsolutionsandroid@gmail.com" href="http://portofsolutions.com">
-        Farzad Aziminia
-    </author>
-    <content src="index.html" />
-    <access origin="*" />
-</widget>
+    <widget id="com.portofsolutions.locationalert" version="0.0.6" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+        <name>Location Alert</name>
+        <description>
+            Locationalert is an application facilate you with alarm on the map, You can pin point your destination and we will notify you when you got close to there.
+        </description>
+        <author email="portofsolutionsandroid@gmail.com" href="http://portofsolutions.com">
+            Farzad Aziminia
+        </author>
+        <content src="index.html" />
+        <access origin="*" />
+        <allow-navigation href="*" />
+        <allow-intent href="*" />
+    </widget>

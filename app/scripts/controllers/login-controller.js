@@ -52,7 +52,7 @@ angular.module('Wayalarm.controllers', [])
 //mapServices.fileOperations();
         $http({
             method: 'POST',
-            url: 'http://52.11.39.202:8080/wayalarm/login',
+            url: 'http://portofsolutions.com:8080/wayalarm/login',
             data: {
                 email: $scope.user.email,
                 password: $scope.user.password
@@ -76,7 +76,7 @@ angular.module('Wayalarm.controllers', [])
 
         $http({
             method: 'POST',
-            url: 'http://52.11.39.202:8080/wayalarm/user',
+            url: 'http://portofsolutions.com:8080/wayalarm/user',
             data: {
                 email: $scope.user.email,
                 password: $scope.user.password

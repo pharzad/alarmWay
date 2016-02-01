@@ -52,6 +52,8 @@
     "org.apache.cordova.statusbar",
     "org.apache.cordova.vibration",
     "org.apache.cordova.media",
-    "cordova-plugin-file"
+    "cordova-plugin-file",
+    "cordova-plugin-whitelist",
+    "cordova-plugin-admobpro"
   ]
 }
